@@ -23,6 +23,8 @@ function GetBackgroundColor(colorNum: number): LetterColor {
   return LetterColor.Green;
 }
 
+function CycleLetterCorrectness() {}
+
 export default function LetterButton(letter: Letter): React.ReactElement {
   const backgroundColor: Property.BackgroundColor = GetBackgroundColor(
     letter.color
