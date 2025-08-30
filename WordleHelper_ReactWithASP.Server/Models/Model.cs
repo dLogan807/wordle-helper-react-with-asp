@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace WordleHelper_ReactWithASP.Server.Models;
 
@@ -26,16 +27,13 @@ public class Model
         Words = LoadWords(wordAssetPath);
     }
 
-    private HashSet<Word> LoadWords(string wordAssetPath)
+    private HashSet<Word> LoadWords(string wordFileName)
     {
-        Debug.WriteLine($"Loading words from {wordAssetPath}");
+        string path = Path.Combine(Environment.CurrentDirectory, @"Assets/", wordFileName);
 
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        using Stream? stream =
-            assembly.GetManifestResourceStream(wordAssetPath)
-            ?? throw new FileNotFoundException(
-                $"Could not find word list resource at {wordAssetPath}"
-            );
+        Debug.WriteLine($"Loading words from {path}");
+
+        using Stream stream = File.OpenRead(path);
         using BufferedStream bs = new(stream);
         using StreamReader sr = new(bs);
 
@@ -56,7 +54,7 @@ public class Model
         return wordList;
     }
 
-    public bool IsValidGuess(string[] guesses, string thisGuess)
+    public bool IsValidGuess(Guess[] guesses, string thisGuess)
     {
         if (string.IsNullOrEmpty(thisGuess))
             return false;
@@ -75,20 +73,26 @@ public class Model
         return IsExistingAndNotGuessed(guesses, thisGuess);
     }
 
-    private bool IsExistingAndNotGuessed(string[] guesses, string thisGuess)
+    private bool IsExistingAndNotGuessed(Guess[] guesses, string thisGuess)
     {
         Word word = new(thisGuess);
-        HashSet<Word> guessed = [];
-        foreach (string guess in guesses)
+
+        foreach (Guess guess in guesses)
         {
-            guessed.Add(new Word(guess));
+            if (guess.Equals(thisGuess))
+                return false;
         }
 
-        return !guessed.Contains(word) && Words.Contains(word);
+        return Words.Contains(word);
     }
 
     public Word[] GetPossibleWords(List<Guess> guesses)
     {
+        if (guesses == null || guesses.Count == 0)
+        {
+            return [];
+        }
+
         Regex regex = _wordRegexBuilder.GenerateRegex(guesses);
 
         Word[] possibleWords = [.. Words.Where(word => regex.IsMatch(word.WordString))];

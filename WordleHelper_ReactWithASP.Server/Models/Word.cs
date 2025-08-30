@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace WordleHelper_ReactWithASP.Server.Models;
 
 public class Word : IEquatable<Word>, IComparable<Guess>
 {
+    [Required]
     public string WordString { get; }
 
     private readonly int _hashCode;

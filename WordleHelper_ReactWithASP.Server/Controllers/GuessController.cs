@@ -1,29 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using WordleHelper_ReactWithASP.Server.Models;
 
-namespace WordleHelper_ReactWithASP.Server.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class GuessController : ControllerBase
+namespace WordleHelper_ReactWithASP.Server.Controllers
 {
-    private static readonly Model Model = new(
-        "WordleHelper_ReactWithASP.Server.Assets.words.txt",
-        5,
-        6
-    );
-
-    [HttpPost]
-    public bool IsValidGuess(string[] guesses, string word)
+    [ApiController]
+    public class GuessController(ILogger<GuessController> logger) : ControllerBase
     {
-        return Model.IsValidGuess(guesses, word);
-    }
+        private readonly ILogger<GuessController> _logger = logger;
 
-    [HttpPost]
-    public Word[] GetPossibleWords(Guess[] guesses)
-    {
-        List<Guess> guessList = [.. guesses];
+        private static readonly Model Model = new("words.txt", 5, 6);
 
-        return Model.GetPossibleWords(guesses);
+        [HttpPost("[controller]/valid/")]
+        public bool IsValidGuess([FromBody] Guess[] guesses, string thisGuess)
+        {
+            return Model.IsValidGuess(guesses, thisGuess);
+        }
+
+        [HttpPost("[controller]/possiblewords/")]
+        public Word[] GetPossibleWords(Guess[] guesses)
+        {
+            List<Guess> guessList = [.. guesses];
+
+            return Model.GetPossibleWords(guessList);
+        }
     }
 }

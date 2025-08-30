@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,9 @@ namespace WordleHelper_ReactWithASP.Server.Models;
 
 public class Letter : INotifyPropertyChanged, IEquatable<Letter>
 {
+    [Required]
     public char Value { get; }
-    public char ValueUpper { get; }
+    public char ValueUpper => char.ToUpper(Value);
 
     LetterCorrectness _correctness;
 
@@ -30,7 +32,6 @@ public class Letter : INotifyPropertyChanged, IEquatable<Letter>
         ValidateIsAlphabetical(value);
 
         Value = value;
-        ValueUpper = char.ToUpper(value);
         Correctness = LetterCorrectness.NotPresent;
     }
 
@@ -39,7 +40,6 @@ public class Letter : INotifyPropertyChanged, IEquatable<Letter>
         ValidateIsAlphabetical(value);
 
         Value = value;
-        ValueUpper = char.ToUpper(value);
         Correctness = correctness;
     }
 
