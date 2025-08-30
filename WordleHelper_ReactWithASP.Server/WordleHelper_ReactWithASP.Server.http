@@ -1,0 +1,6 @@
+@WordleHelper_ReactWithASP.Server_HostAddress = http://localhost:5090
+
+GET {{WordleHelper_ReactWithASP.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

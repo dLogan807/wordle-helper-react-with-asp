@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "wordlehelper_reactwithasp.client", "wordlehelper_reactwithasp.client\wordlehelper_reactwithasp.client.esproj", "{32C0D436-A540-F24D-D8B0-90253288916D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordleHelper_ReactWithASP.Server", "WordleHelper_ReactWithASP.Server\WordleHelper_ReactWithASP.Server.csproj", "{AA89AF87-0403-4ACD-B208-5AED988D646A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32C0D436-A540-F24D-D8B0-90253288916D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C0D436-A540-F24D-D8B0-90253288916D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C0D436-A540-F24D-D8B0-90253288916D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{32C0D436-A540-F24D-D8B0-90253288916D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C0D436-A540-F24D-D8B0-90253288916D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32C0D436-A540-F24D-D8B0-90253288916D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AA89AF87-0403-4ACD-B208-5AED988D646A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA89AF87-0403-4ACD-B208-5AED988D646A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA89AF87-0403-4ACD-B208-5AED988D646A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA89AF87-0403-4ACD-B208-5AED988D646A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF4C2D02-8153-49B5-927E-EC9A06DE1AC9}
+	EndGlobalSection
+EndGlobal
