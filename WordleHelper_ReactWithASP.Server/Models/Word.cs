@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WordleHelper.Models;
+namespace WordleHelper_ReactWithASP.Server.Models;
 
 public class Word : IEquatable<Word>, IComparable<Guess>
 {

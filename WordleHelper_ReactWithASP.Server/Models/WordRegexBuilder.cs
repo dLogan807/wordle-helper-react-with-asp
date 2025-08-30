@@ -7,8 +7,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace WordleHelper.Models;
+namespace WordleHelper_ReactWithASP.Server.Models;
 
+//Note: could be simplified to generate an expression where a list of possible letters is specified at each index of the word (e.g. ^.gu[abce][abc]ss)
 public class WordRegexBuilder(int wordLength)
 {
     public readonly int _wordLength = wordLength;
@@ -185,7 +186,7 @@ public class WordRegexBuilder(int wordLength)
         }
         else
         {
-            regex = ".{" + (charsFromPrevLetter) + "}" + letter;
+            regex = ".{" + charsFromPrevLetter + "}" + letter;
         }
 
         return regex;
