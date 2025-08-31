@@ -54,39 +54,44 @@ public class Model
         return wordList;
     }
 
-    public bool IsValidGuess(GuessValidation req)
+    public ValidationResponse IsValidGuess(GuessValidation req)
     {
-        if (string.IsNullOrEmpty(req.Guess))
-            return false;
-
-        req.Guess = req.Guess.ToLower();
+        ValidationResponse response = new(false, $"Must be {_wordLength} letters");
 
         if (
-            req.Guess.Length != _wordLength
-            || req.PrevGuesses.Length > _maxGuesses
+            string.IsNullOrEmpty(req.Guess)
+            || req.Guess.Length != _wordLength
             || !req.Guess.All(char.IsLetter)
         )
+            return response;
+
+        if (req.PrevGuesses.Length > _maxGuesses)
         {
-            return false;
+            response.Message = "Too many guesses";
+            return response;
         }
 
         return IsExistingAndNotGuessed(req);
     }
 
-    private bool IsExistingAndNotGuessed(GuessValidation req)
+    private ValidationResponse IsExistingAndNotGuessed(GuessValidation req)
     {
-        Word word = new(req.Guess);
-
         foreach (string guess in req.PrevGuesses)
         {
             if (guess.Equals(req.Guess))
-                return false;
+                return new(false, "Already guessed");
         }
 
-        return Words.Contains(word);
+        Word word = new(req.Guess.ToLower());
+        if (!Words.Contains(word))
+        {
+            return new(false, "Not in word list");
+        }
+
+        return new(true, "Valid guess");
     }
 
-    public Word[] GetPossibleWords(List<Guess> guesses)
+    public string[] GetPossibleWords(List<Guess> guesses)
     {
         if (guesses == null || guesses.Count == 0)
         {
@@ -95,7 +100,10 @@ public class Model
 
         Regex regex = _wordRegexBuilder.GenerateRegex(guesses);
 
-        Word[] possibleWords = [.. Words.Where(word => regex.IsMatch(word.WordString))];
+        string[] possibleWords =
+        [
+            .. Words.Where(word => regex.IsMatch(word.WordString)).Select(word => word.WordString),
+        ];
 
         return possibleWords;
     }

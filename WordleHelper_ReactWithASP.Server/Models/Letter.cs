@@ -5,15 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WordleHelper_ReactWithASP.Server.Models;
 
 public class Letter : INotifyPropertyChanged, IEquatable<Letter>
 {
-    [Required]
     public char Value { get; }
-    public char ValueUpper => char.ToUpper(Value);
 
     LetterCorrectness _correctness;
 
@@ -35,6 +34,7 @@ public class Letter : INotifyPropertyChanged, IEquatable<Letter>
         Correctness = LetterCorrectness.NotPresent;
     }
 
+    [JsonConstructorAttribute]
     public Letter(char value, LetterCorrectness correctness)
     {
         ValidateIsAlphabetical(value);

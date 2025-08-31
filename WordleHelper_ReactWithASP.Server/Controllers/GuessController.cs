@@ -12,13 +12,15 @@ namespace WordleHelper_ReactWithASP.Server.Controllers
         private static readonly Model Model = new("words.txt", 5, 6);
 
         [HttpPost("[controller]/validate/")]
-        public bool IsValidGuess([FromBody] GuessValidation validationRequest)
+        public ActionResult<ValidationResponse> IsValidGuess(
+            [FromBody] GuessValidation validationRequest
+        )
         {
-            return Model.IsValidGuess(validationRequest);
+            return Ok(Model.IsValidGuess(validationRequest));
         }
 
         [HttpPost("[controller]/possiblewords/")]
-        public Word[] GetPossibleWords(Guess[] guesses)
+        public IEnumerable<string> GetPossibleWords(Guess[] guesses)
         {
             List<Guess> guessList = [.. guesses];
 

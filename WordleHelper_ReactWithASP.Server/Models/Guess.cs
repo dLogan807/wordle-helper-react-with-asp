@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WordleHelper_ReactWithASP.Server.Models;
@@ -18,5 +19,12 @@ public class Guess : Word
         {
             Letters[i] = new(word[i]);
         }
+    }
+
+    [JsonConstructorAttribute]
+    public Guess(Letter[] letters, string wordstring)
+        : base(wordstring)
+    {
+        Letters = letters;
     }
 }

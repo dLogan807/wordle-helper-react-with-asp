@@ -14,3 +14,64 @@ Content-Type: application/json
 }
 
 ###
+
+POST {{WordleHelper_ReactWithASP.Server_HostAddress}}/guess/possiblewords
+Content-Type: application/json
+
+ [
+{
+    "WordString": "hello",
+    "Letters": [
+      {
+        "Value": "h",
+        "correctness": 2
+      },
+      {
+        "Value": "e",
+        "correctness": 2
+      },
+      {
+        "Value": "l",
+        "correctness": 2
+      },
+      {
+        "Value": "l",
+        "correctness": 2
+      },
+      {
+        "Value": "o",
+        "correctness": 2
+      }
+    ]
+  }
+]
+
+###
+
+# [
+#   {
+#     "WordString": "hello",
+#     "Letters": [
+#       {
+#         "Value": "h",
+#         "LetterCorrectness": 1
+#       },
+#       {
+#         "Value": "e",
+#         "LetterCorrectness": 1
+#       },
+#       {
+#         "Value": "l",
+#         "LetterCorrectness": 1
+#       },
+#       {
+#         "Value": "l",
+#         "LetterCorrectness": 1
+#       },
+#       {
+#         "Value": "0",
+#         "LetterCorrectness": 1
+#       }
+#     ]
+#   }
+# ]
