@@ -1,11 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./LetterButton.css";
 import { Property } from "csstype";
-
-export type Letter = {
-  value: string;
-  color: number;
-};
+import { Letter } from "../App";
 
 enum LetterColor {
   Gray = "#3a3a3c",
@@ -13,7 +9,7 @@ enum LetterColor {
   Green = "#538d4e",
 }
 
-function GetBackgroundColor(colorNum: number): LetterColor {
+function getBackgroundColor(colorNum: number): LetterColor {
   if (colorNum === 0) {
     return LetterColor.Gray;
   } else if (colorNum === 1) {
@@ -23,17 +19,25 @@ function GetBackgroundColor(colorNum: number): LetterColor {
   return LetterColor.Green;
 }
 
-function CycleLetterCorrectness() {}
+function CycleLetterCorrectness(letter: Letter) {
+  letter.color = letter.color >= 2 ? (letter.color = 1) : letter.color++;
+}
 
 export default function LetterButton(letter: Letter): React.ReactElement {
-  const backgroundColor: Property.BackgroundColor = GetBackgroundColor(
-    letter.color
-  );
+  const [backgroundColor, setBackgroundColor] =
+    useState<Property.BackgroundColor>(getBackgroundColor(letter.color));
+
+  useEffect(() => {
+    setBackgroundColor(getBackgroundColor(letter.color));
+  }, [letter.color]);
 
   return (
     <button
       style={{
         backgroundColor: backgroundColor,
+      }}
+      onClick={() => {
+        CycleLetterCorrectness(letter);
       }}
     >
       <div>
