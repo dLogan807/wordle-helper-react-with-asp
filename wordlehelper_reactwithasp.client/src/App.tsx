@@ -21,31 +21,58 @@ type ValidationRequest = {
   prevGuesses: string[];
 };
 
-function App() {
+const BACKEND: string = "https://localhost:7105";
+
+export default function App() {
   const [results, setResults] = useState<string[]>([]);
 
   const guesses: Guess[] = [
     {
-      wordString: "hello",
+      wordString: "snark",
       letters: [
         {
-          value: "h",
+          value: "s",
+          correctness: 1,
+        },
+        {
+          value: "n",
+          correctness: 0,
+        },
+        {
+          value: "a",
           correctness: 2,
         },
         {
-          value: "e",
-          correctness: 2,
+          value: "r",
+          correctness: 0,
+        },
+        {
+          value: "k",
+          correctness: 0,
+        },
+      ],
+    },
+    {
+      wordString: "blast",
+      letters: [
+        {
+          value: "b",
+          correctness: 0,
         },
         {
           value: "l",
+          correctness: 1,
+        },
+        {
+          value: "a",
           correctness: 2,
         },
         {
-          value: "l",
+          value: "s",
           correctness: 2,
         },
         {
-          value: "o",
+          value: "t",
           correctness: 2,
         },
       ],
@@ -81,14 +108,11 @@ function App() {
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "application/json");
 
-    const request: RequestInfo = new Request(
-      `${process.env.REACT_APP_BACKEND}/guess/validate`,
-      {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(guessValidReq),
-      }
-    );
+    const request: RequestInfo = new Request(`${BACKEND}/guess/validate`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(guessValidReq),
+    });
 
     const response: ValidationResponse = await fetch(request)
       .then((res) => res.json())
@@ -109,14 +133,11 @@ function App() {
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "application/json");
 
-    const request: RequestInfo = new Request(
-      `${process.env.REACT_APP_BACKEND}/guess/possiblewords`,
-      {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(guesses),
-      }
-    );
+    const request: RequestInfo = new Request(`${BACKEND}/guess/possiblewords`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(guesses),
+    });
 
     const response: string[] = await fetch(request)
       .then((res) => res.json())
@@ -130,5 +151,3 @@ function App() {
     return response;
   }
 }
-
-export default App;
