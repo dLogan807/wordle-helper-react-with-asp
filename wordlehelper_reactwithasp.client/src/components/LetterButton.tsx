@@ -20,16 +20,17 @@ function getBackgroundColor(colorNum: number): LetterColor {
 }
 
 function CycleLetterCorrectness(letter: Letter) {
-  letter.color = letter.color >= 2 ? (letter.color = 1) : letter.color++;
+  letter.correctness =
+    letter.correctness >= 2 ? (letter.correctness = 1) : letter.correctness++;
 }
 
 export default function LetterButton(letter: Letter): React.ReactElement {
   const [backgroundColor, setBackgroundColor] =
-    useState<Property.BackgroundColor>(getBackgroundColor(letter.color));
+    useState<Property.BackgroundColor>(getBackgroundColor(letter.correctness));
 
   useEffect(() => {
-    setBackgroundColor(getBackgroundColor(letter.color));
-  }, [letter.color]);
+    setBackgroundColor(getBackgroundColor(letter.correctness));
+  }, [letter.correctness]);
 
   return (
     <button

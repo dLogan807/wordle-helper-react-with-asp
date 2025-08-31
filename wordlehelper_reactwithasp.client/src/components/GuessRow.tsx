@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import LetterButton, { Letter } from "./LetterButton";
+import LetterButton from "./LetterButton";
+import { Letter } from "../App";
 
 export default function GuessRow(letters: Letter[]) {
   let letterButtons = letters.map((letter, idx) => (
