@@ -1,0 +1,16 @@
+﻿@WordleHelper_ReactWithASP.Server_HostAddress = https://localhost:7105
+
+POST {{WordleHelper_ReactWithASP.Server_HostAddress}}/guess/validate
+Content-Type: application/json
+
+{
+  "Guess": "beans",
+  "PrevGuesses": [
+    "wordy",
+    "large",
+    "ready",
+    "hello"
+  ]
+}
+
+###

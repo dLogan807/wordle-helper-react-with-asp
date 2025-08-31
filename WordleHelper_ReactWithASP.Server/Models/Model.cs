@@ -54,32 +54,32 @@ public class Model
         return wordList;
     }
 
-    public bool IsValidGuess(Guess[] guesses, string thisGuess)
+    public bool IsValidGuess(GuessValidation req)
     {
-        if (string.IsNullOrEmpty(thisGuess))
+        if (string.IsNullOrEmpty(req.Guess))
             return false;
 
-        thisGuess = thisGuess.ToLower();
+        req.Guess = req.Guess.ToLower();
 
         if (
-            thisGuess.Length != _wordLength
-            || guesses.Length > _maxGuesses
-            || !thisGuess.All(char.IsLetter)
+            req.Guess.Length != _wordLength
+            || req.PrevGuesses.Length > _maxGuesses
+            || !req.Guess.All(char.IsLetter)
         )
         {
             return false;
         }
 
-        return IsExistingAndNotGuessed(guesses, thisGuess);
+        return IsExistingAndNotGuessed(req);
     }
 
-    private bool IsExistingAndNotGuessed(Guess[] guesses, string thisGuess)
+    private bool IsExistingAndNotGuessed(GuessValidation req)
     {
-        Word word = new(thisGuess);
+        Word word = new(req.Guess);
 
-        foreach (Guess guess in guesses)
+        foreach (string guess in req.PrevGuesses)
         {
-            if (guess.Equals(thisGuess))
+            if (guess.Equals(req.Guess))
                 return false;
         }
 

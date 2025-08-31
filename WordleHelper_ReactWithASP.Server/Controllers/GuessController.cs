@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 using WordleHelper_ReactWithASP.Server.Models;
 
@@ -10,10 +11,10 @@ namespace WordleHelper_ReactWithASP.Server.Controllers
 
         private static readonly Model Model = new("words.txt", 5, 6);
 
-        [HttpPost("[controller]/valid/")]
-        public bool IsValidGuess([FromBody] Guess[] guesses, string thisGuess)
+        [HttpPost("[controller]/validate/")]
+        public bool IsValidGuess([FromBody] GuessValidation validationRequest)
         {
-            return Model.IsValidGuess(guesses, thisGuess);
+            return Model.IsValidGuess(validationRequest);
         }
 
         [HttpPost("[controller]/possiblewords/")]
