@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
+import LetterButton from "./components/LetterButton";
 
 export type Letter = {
   value: string;
@@ -91,8 +92,18 @@ export default function App() {
       <p>No guesses yet.</p>
     ) : (
       <ul>
-        {guesses.map((guess) => (
-          <li>{guess.wordString}</li>
+        {guesses.map((guess, idx) => (
+          <li key={idx}>
+            {guess.letters.map((letter, idx) => (
+              <LetterButton
+                key={idx}
+                letter={letter}
+                clickAction={() => {
+                  cycleLetterCorrectness(letter);
+                }}
+              />
+            ))}
+          </li>
         ))}
       </ul>
     );
@@ -167,7 +178,6 @@ export default function App() {
       setGuesses([...guesses, convertToGuess(guessValidReq.guess)]);
     }
     setGuessSuccess(response);
-    console.log(response);
 
     return response;
   }
@@ -191,8 +201,21 @@ export default function App() {
       });
 
     setResults(response);
-    console.log(response);
+
     return response;
+  }
+
+  function cycleLetterCorrectness(letter: Letter) {
+    const newGuesses: Guess[] = guesses.map((guess) => ({
+      ...guess,
+      letters: guess.letters.map((l) =>
+        l === letter
+          ? { ...l, correctness: l.correctness >= 2 ? 0 : l.correctness + 1 }
+          : l
+      ),
+    }));
+
+    setGuesses(newGuesses);
   }
 
   function guessesToArray(guesses: Guess[]): string[] {
@@ -210,8 +233,6 @@ export default function App() {
       wordString: guessString,
       letters: letters,
     };
-
-    console.log("converted to guess");
 
     return guess;
   }
