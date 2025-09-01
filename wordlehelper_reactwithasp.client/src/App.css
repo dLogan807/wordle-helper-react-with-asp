@@ -15,3 +15,9 @@
   margin-left: 1rem;
   font-size: small;
 }
+
+.remove_button {
+  color: #fa5252;
+  background-color: rgba(250, 82, 82, 0.15);
+  margin-left: 1rem;
+}

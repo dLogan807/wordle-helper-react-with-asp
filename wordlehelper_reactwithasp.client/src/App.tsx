@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import LetterButton from "./components/LetterButton";
+import { IconTrash } from "@tabler/icons-react";
 
 export type Letter = {
   value: string;
@@ -95,10 +96,16 @@ export default function App() {
                 key={idx}
                 letter={letter}
                 clickAction={() => {
-                  cycleLetterCorrectness(letter);
+                  getNextLetterCorrectness(letter);
                 }}
               />
             ))}
+            <button
+              className="remove_button"
+              onClick={() => removeGuess(guess)}
+            >
+              <IconTrash />
+            </button>
           </li>
         ))}
       </ul>
@@ -203,17 +210,26 @@ export default function App() {
     return response;
   }
 
-  function cycleLetterCorrectness(letter: Letter) {
+  //Set array to one not containing guess
+  function removeGuess(guess: Guess) {
+    setGuesses(guesses.filter((g) => g.wordString != guess.wordString));
+  }
+
+  function getNextLetterCorrectness(letter: Letter) {
     const newGuesses: Guess[] = guesses.map((guess) => ({
       ...guess,
       letters: guess.letters.map((l) =>
         l === letter
-          ? { ...l, correctness: l.correctness >= 2 ? 0 : l.correctness + 1 }
+          ? { ...l, correctness: cycleLetterCorrectness(l.correctness) }
           : l
       ),
     }));
 
     setGuesses(newGuesses);
+  }
+
+  function cycleLetterCorrectness(correctness: number): number {
+    return correctness >= 2 ? 0 : correctness + 1;
   }
 
   function guessesToArray(guesses: Guess[]): string[] {
