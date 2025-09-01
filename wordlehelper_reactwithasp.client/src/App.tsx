@@ -83,10 +83,6 @@ export default function App() {
     },
   ];
 
-  useEffect(() => {
-    getPossibleWords(testGuesses);
-  }, []);
-
   const guessGrid: React.ReactElement =
     guesses === undefined ? (
       <p>No guesses yet.</p>
@@ -106,16 +102,6 @@ export default function App() {
           </li>
         ))}
       </ul>
-    );
-
-  const contents: React.ReactElement =
-    results === undefined ? (
-      <p>Loading...</p>
-    ) : (
-      <div>
-        <h3>Got results!</h3>
-        <p>{results}</p>
-      </div>
     );
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -145,7 +131,19 @@ export default function App() {
       </form>
       {formMessage}
       {guessGrid}
-      {contents}
+      <button
+        disabled={guesses.length == 0}
+        onClick={async () => {
+          await getPossibleWords(guesses);
+        }}
+      >
+        Get Possible Words!
+      </button>
+      <ul>
+        {results.map((word, idx) => (
+          <li key={idx}>{word}</li>
+        ))}
+      </ul>
     </div>
   );
 
