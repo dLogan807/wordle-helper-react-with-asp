@@ -86,6 +86,17 @@ export default function App() {
     getPossibleWords(testGuesses);
   }, []);
 
+  const guessGrid: React.ReactElement =
+    guesses === undefined ? (
+      <p>No guesses yet.</p>
+    ) : (
+      <ul>
+        {guesses.map((guess) => (
+          <li>{guess.wordString}</li>
+        ))}
+      </ul>
+    );
+
   const contents: React.ReactElement =
     results === undefined ? (
       <p>Loading...</p>
@@ -115,13 +126,14 @@ export default function App() {
           e.preventDefault();
           const formData = new FormData(e.currentTarget);
           const guess = formData.get("guess") as string;
-          validateGuess({ guess, prevGuesses: [] });
+          validateGuess({ guess, prevGuesses: guessesToArray(guesses) });
         }}
       >
         <input name="guess" placeholder="Enter guess" />
         <button type="submit">Add</button>
       </form>
       {formMessage}
+      {guessGrid}
       {contents}
     </div>
   );
@@ -152,6 +164,7 @@ export default function App() {
 
     if (response.validated) {
       formRef.current?.reset();
+      setGuesses([...guesses, convertToGuess(guessValidReq.guess)]);
     }
     setGuessSuccess(response);
     console.log(response);
@@ -180,5 +193,26 @@ export default function App() {
     setResults(response);
     console.log(response);
     return response;
+  }
+
+  function guessesToArray(guesses: Guess[]): string[] {
+    const stringGuesses: string[] = guesses.map((guess) => guess.wordString);
+    return stringGuesses;
+  }
+
+  function convertToGuess(guessString: string): Guess {
+    const letters: Letter[] = guessString.split("").map((letterString) => ({
+      value: letterString,
+      correctness: 0,
+    }));
+
+    const guess: Guess = {
+      wordString: guessString,
+      letters: letters,
+    };
+
+    console.log("converted to guess");
+
+    return guess;
   }
 }
