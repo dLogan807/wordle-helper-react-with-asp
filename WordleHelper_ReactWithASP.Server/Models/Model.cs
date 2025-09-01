@@ -65,9 +65,9 @@ public class Model
         )
             return response;
 
-        if (req.PrevGuesses.Length > _maxGuesses)
+        if (req.PrevGuesses.Length >= _maxGuesses)
         {
-            response.Message = "Too many guesses";
+            response.Message = "Maximum guesses reached";
             return response;
         }
 

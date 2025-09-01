@@ -170,32 +170,32 @@ export default function App() {
 
     setGuesses(newGuesses);
   }
+}
 
-  //Increment correctness value
-  function cycleLetterCorrectness(correctness: number): number {
-    return correctness >= 2 ? 0 : correctness + 1;
-  }
+//Increment correctness value
+function cycleLetterCorrectness(correctness: number): number {
+  return correctness >= 2 ? 0 : correctness + 1;
+}
 
-  function guessesToStringArray(guesses: Guess[]): string[] {
-    const stringGuesses: string[] = guesses.map((guess) => guess.wordString);
-    return stringGuesses;
-  }
+function guessesToStringArray(guesses: Guess[]): string[] {
+  const stringGuesses: string[] = guesses.map((guess) => guess.wordString);
+  return stringGuesses;
+}
 
-  function stringToGuess(guessString: string): Guess {
-    const letters: Letter[] = guessString.split("").map((letterString) => ({
-      value: letterString,
-      correctness: 0,
-    }));
+function stringToGuess(guessString: string): Guess {
+  const letters: Letter[] = guessString.split("").map((letterString) => ({
+    value: letterString,
+    correctness: 0,
+  }));
 
-    const guess: Guess = {
-      wordString: guessString,
-      letters: letters,
-    };
+  const guess: Guess = {
+    wordString: guessString,
+    letters: letters,
+  };
 
-    return guess;
-  }
+  return guess;
+}
 
-  function capitalizeFirstLetter(word: string): string {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }
+function capitalizeFirstLetter(word: string): string {
+  return word.charAt(0).toUpperCase() + word.slice(1);
 }
