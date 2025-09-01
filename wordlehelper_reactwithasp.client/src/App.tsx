@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import LetterButton from "./components/LetterButton";
-import { IconTrash } from "@tabler/icons-react";
+import RemoveButton from "./components/RemoveButton";
+import GuessItem from "./components/GuessItem";
 
 export type Letter = {
   value: string;
   correctness: number;
 };
 
-type Guess = {
+export type Guess = {
   wordString: string;
   letters: Letter[];
 };
@@ -28,85 +29,20 @@ const BACKEND: string = "https://localhost:7105";
 export default function App() {
   const [results, setResults] = useState<string[]>([]);
   const [guesses, setGuesses] = useState<Guess[]>([]);
-
   const [guessSuccess, setGuessSuccess] = useState<ValidationResponse>();
 
-  const testGuesses: Guess[] = [
-    {
-      wordString: "snark",
-      letters: [
-        {
-          value: "s",
-          correctness: 1,
-        },
-        {
-          value: "n",
-          correctness: 0,
-        },
-        {
-          value: "a",
-          correctness: 2,
-        },
-        {
-          value: "r",
-          correctness: 0,
-        },
-        {
-          value: "k",
-          correctness: 0,
-        },
-      ],
-    },
-    {
-      wordString: "blast",
-      letters: [
-        {
-          value: "b",
-          correctness: 0,
-        },
-        {
-          value: "l",
-          correctness: 1,
-        },
-        {
-          value: "a",
-          correctness: 2,
-        },
-        {
-          value: "s",
-          correctness: 2,
-        },
-        {
-          value: "t",
-          correctness: 2,
-        },
-      ],
-    },
-  ];
-
   const guessGrid: React.ReactElement =
-    guesses === undefined ? (
-      <p>No guesses yet.</p>
+    guesses.length == 0 ? (
+      <p>Your guesses will appear here.</p>
     ) : (
-      <ul>
+      <ul className="guess_container">
         {guesses.map((guess, idx) => (
-          <li key={idx}>
-            {guess.letters.map((letter, idx) => (
-              <LetterButton
-                key={idx}
-                letter={letter}
-                clickAction={() => {
-                  getNextLetterCorrectness(letter);
-                }}
-              />
-            ))}
-            <button
-              className="remove_button"
-              onClick={() => removeGuess(guess)}
-            >
-              <IconTrash />
-            </button>
-          </li>
+          <GuessItem
+            key={idx}
+            guess={guess}
+            clickLetterAction={getNextLetterCorrectness}
+            removeAction={() => removeGuess(guess)}
+          />
         ))}
       </ul>
     );
@@ -116,7 +52,9 @@ export default function App() {
   //Inform of issues with guess
   const formMessage: React.ReactNode =
     guessSuccess?.message !== null && guessSuccess?.validated == false ? (
-      <p className="form_message">{guessSuccess?.message}</p>
+      <div className="form_message">
+        <p>{guessSuccess?.message}</p>
+      </div>
     ) : null;
 
   return (
@@ -130,7 +68,7 @@ export default function App() {
           e.preventDefault();
           const formData = new FormData(e.currentTarget);
           const guess = formData.get("guess") as string;
-          validateGuess({ guess, prevGuesses: guessesToArray(guesses) });
+          validateGuess({ guess, prevGuesses: guessesToStringArray(guesses) });
         }}
       >
         <input name="guess" placeholder="Enter guess" />
@@ -148,12 +86,15 @@ export default function App() {
       </button>
       <ul>
         {results.map((word, idx) => (
-          <li key={idx}>{word}</li>
+          <li key={idx} className="result_item">
+            {capitalizeFirstLetter(word)}
+          </li>
         ))}
       </ul>
     </div>
   );
 
+  //API call. Check if guess is valid
   async function validateGuess(
     guessValidReq: ValidationRequest
   ): Promise<ValidationResponse> {
@@ -180,13 +121,14 @@ export default function App() {
 
     if (response.validated) {
       formRef.current?.reset();
-      setGuesses([...guesses, convertToGuess(guessValidReq.guess)]);
+      setGuesses([...guesses, stringToGuess(guessValidReq.guess)]);
     }
     setGuessSuccess(response);
 
     return response;
   }
 
+  //API call. Get possible words from guesses
   async function getPossibleWords(guesses: Guess[]): Promise<string[]> {
     const headers: Headers = new Headers();
     headers.set("Content-Type", "application/json");
@@ -215,6 +157,7 @@ export default function App() {
     setGuesses(guesses.filter((g) => g.wordString != guess.wordString));
   }
 
+  //Set new array of guesses where letter has new correctness
   function getNextLetterCorrectness(letter: Letter) {
     const newGuesses: Guess[] = guesses.map((guess) => ({
       ...guess,
@@ -228,16 +171,17 @@ export default function App() {
     setGuesses(newGuesses);
   }
 
+  //Increment correctness value
   function cycleLetterCorrectness(correctness: number): number {
     return correctness >= 2 ? 0 : correctness + 1;
   }
 
-  function guessesToArray(guesses: Guess[]): string[] {
+  function guessesToStringArray(guesses: Guess[]): string[] {
     const stringGuesses: string[] = guesses.map((guess) => guess.wordString);
     return stringGuesses;
   }
 
-  function convertToGuess(guessString: string): Guess {
+  function stringToGuess(guessString: string): Guess {
     const letters: Letter[] = guessString.split("").map((letterString) => ({
       value: letterString,
       correctness: 0,
@@ -249,5 +193,9 @@ export default function App() {
     };
 
     return guess;
+  }
+
+  function capitalizeFirstLetter(word: string): string {
+    return word.charAt(0).toUpperCase() + word.slice(1);
   }
 }

@@ -6,8 +6,15 @@
 }
 
 .form_message {
-  color: red;
-  margin-top: 0;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: #fa5252;
+  background-color: rgba(250, 82, 82, 0.15);
+}
+
+.form_message p {
+  margin: 0;
   font-weight: 500;
 }
 
@@ -16,8 +23,20 @@
   font-size: small;
 }
 
-.remove_button {
-  color: #fa5252;
-  background-color: rgba(250, 82, 82, 0.15);
-  margin-left: 1rem;
+.guess_container {
+  background-color: #121213;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.guess_container li {
+  margin-bottom: 1rem;
+}
+
+.guess_container li:last-child {
+  margin-bottom: 0rem;
+}
+
+.result_item {
+  text-align: left;
 }
