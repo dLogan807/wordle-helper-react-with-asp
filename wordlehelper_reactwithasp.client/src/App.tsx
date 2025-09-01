@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 export type Letter = {
@@ -25,8 +25,11 @@ const BACKEND: string = "https://localhost:7105";
 
 export default function App() {
   const [results, setResults] = useState<string[]>([]);
+  const [guesses, setGuesses] = useState<Guess[]>([]);
 
-  const guesses: Guess[] = [
+  const [guessSuccess, setGuessSuccess] = useState<ValidationResponse>();
+
+  const testGuesses: Guess[] = [
     {
       wordString: "snark",
       letters: [
@@ -80,10 +83,10 @@ export default function App() {
   ];
 
   useEffect(() => {
-    getPossibleWords(guesses);
+    getPossibleWords(testGuesses);
   }, []);
 
-  const contents =
+  const contents: React.ReactElement =
     results === undefined ? (
       <p>Loading...</p>
     ) : (
@@ -93,10 +96,32 @@ export default function App() {
       </div>
     );
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  //Inform of issues with guess
+  const formMessage: React.ReactNode =
+    guessSuccess?.message !== null && guessSuccess?.validated == false ? (
+      <p className="form_message">{guessSuccess?.message}</p>
+    ) : null;
+
   return (
     <div>
-      <h1 id="tableLabel">Guesses</h1>
-      <p>This component demonstrates data from the server.</p>
+      <h1>Wordle Helper</h1>
+      <p>Provides possible words from what you've guessed.</p>
+      <form
+        className="add_guess_form"
+        ref={formRef}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          const guess = formData.get("guess") as string;
+          validateGuess({ guess, prevGuesses: [] });
+        }}
+      >
+        <input name="guess" placeholder="Enter guess" />
+        <button type="submit">Add</button>
+      </form>
+      {formMessage}
       {contents}
     </div>
   );
@@ -124,6 +149,12 @@ export default function App() {
         validated: false,
         message: "A server error occured",
       }));
+
+    if (response.validated) {
+      formRef.current?.reset();
+    }
+    setGuessSuccess(response);
+    console.log(response);
 
     return response;
   }
